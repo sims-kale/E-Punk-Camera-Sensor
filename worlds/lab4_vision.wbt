@@ -1,0 +1,101 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "../protos/E-puck.proto"
+
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.47646896482866685 0.4820782907729838 0.7352399928734135 1.8624267938177304
+  position -0.027154347450950557 -0.6674792846509159 1.4782064795072323
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  size 1 1
+}
+DEF WALL_1 Solid {
+  translation 0.5 0 0.05
+  children [
+    DEF WALL_SHAPE Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0.8 0.8
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 0.98 0.1
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE WALL_SHAPE
+}
+DEF WALL_2 Solid {
+  translation -0.5 0 0.05
+  children [
+    USE WALL_SHAPE
+  ]
+  name "solid(2)"
+  boundingObject USE WALL_SHAPE
+}
+DEF WALL_3 Solid {
+  translation 0 -0.5 0.05
+  rotation 0 0 1 1.5708
+  children [
+    USE WALL_SHAPE
+  ]
+  name "solid(3)"
+  boundingObject USE WALL_SHAPE
+}
+DEF WALL_4 Solid {
+  translation 0 0.5 0.05
+  rotation 0 0 1 1.5708
+  children [
+    USE WALL_SHAPE
+  ]
+  name "solid(4)"
+  boundingObject USE WALL_SHAPE
+}
+Solid {
+  translation 0.376213 -0.391366 0.15
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.666667 1 0
+        }
+      }
+      geometry Cylinder {
+        bottom FALSE
+        height 0.3
+        radius 0.08
+      }
+      castShadows FALSE
+    }
+  ]
+  name "goal"
+  boundingObject Cylinder {
+    height 0.3
+    radius 0.05
+  }
+  recognitionColors [
+    0.666667 1 0
+  ]
+}
+E-puck {
+  hidden position_0_0 84.44928608765194
+  hidden position_0_1 83.48473698367764
+  hidden rotation_1 0 -0.9999999999999999 0 3.5153082128622692
+  hidden rotation_2 0 -1 0 4.479857316836576
+  translation -0.245786 0.416161 -0.00125871
+  rotation -0.0007490441605365935 -0.0015171072535680656 -0.9999985686581889 0.9159180600306972
+  controller "vision_controller"
+  camera_recognition Recognition {
+  }
+}
