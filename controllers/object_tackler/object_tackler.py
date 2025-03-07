@@ -6,8 +6,8 @@ robot = Robot()
 MAX_SPEED = 6.28
 timestep = int(robot.getBasicTimeStep())
 
-# Red detection thresholds (R, G, B)
-RED_THRESHOLD = [0.8, 0.5, 0.5]  # Red >= 0.8, Green/Blue <= 0.5
+# Purple detection thresholds (R, G, B)
+PURPLE_THRESHOLD = [0.8, 0.5, 0.5]  # Red >= 0.8, Green/Blue <= 0.5
 
 # Camera setup
 camera = robot.getDevice("camera")
@@ -27,38 +27,46 @@ right_motor.setVelocity(0.0)
 CENTER_THRESHOLD = 10  # Pixels
 
 
-def is_red(color):
-    """Check if color is primarily red (high R, low G/B)."""
+def is_purple(color):
+    """Check if color is primarily purple (high R, low G/B)."""
     return (
-        color[0] >= RED_THRESHOLD[0] and  # Strong red component
-        color[1] <= RED_THRESHOLD[1] and  # Low green
-        color[2] <= RED_THRESHOLD[2]      # Low blue
+        color[0] >= PURPLE_THRESHOLD[0] and  
+        color[1] <= PURPLE_THRESHOLD[1] and 
+        color[2] <= PURPLE_THRESHOLD[2]     
     )
 
 
 while robot.step(timestep) != -1:
-    red_object = None
+    purple_object = None
+    img = camera.getImage()
+    # print("Image data", img)
+    
+    
     objects = camera.getRecognitionObjects()
     
     print(f"Total detected objects: {len(objects)}")  # Debugging
     
-    # Find the reddest object (prioritizing R > G/B)
+    # Find the object (prioritizing R > G/B)
     for obj in objects:
         obj_color = obj.colors
         print(f"Detected Color - R: {obj_color[0]:.2f}, G: {obj_color[1]:.2f}, B: {obj_color[2]:.2f}")
         
-        if is_red(obj_color):
-            red_object = obj
-            break  # First red object found
+        if is_purple(obj_color):
+            purple_object = obj
+            break  # First purple object found
     
     # Initialize search behavior
     left_speed = 0.4 * MAX_SPEED    # Rotate clockwise
     right_speed = -0.4 * MAX_SPEED
     
-    if red_object:
-        print("RED OBJECT DETECTED! Navigating...")
-        position_on_image = red_object.getPositionOnImage()[0]
-        relative_position = red_object.getPosition()[2]
+    if purple_object:
+        print("PURPLE OBJECT DETECTED! Navigating...")
+        
+        save_img = camera.saveImage("Sample.jpg", 100)
+        print("Image Saved")   # saving Image just for debugging and practice purpose
+       
+        position_on_image = purple_object.getPositionOnImage()[0]
+        relative_position = purple_object.getPosition()[2]
         print(f"Object position in image: {position_on_image}")
         print(f"Distance from robot: {relative_position:.2f}")
         
@@ -83,7 +91,7 @@ while robot.step(timestep) != -1:
                 left_speed = 0
                 right_speed = 0
     else:
-        print("No red object found. Searching...")
+        print("No Purple object found. Searching...")
     
     # Update motors
     left_motor.setVelocity(left_speed)
